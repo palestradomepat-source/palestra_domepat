@@ -166,11 +166,6 @@
             border: 1px dashed var(--grigio-verde);
         }
 
-        #loading-message p {
-            line-height: 1.6;
-            max-width: 800px;
-        }
-
         /* GRIGLIA ATLETI (FOTO E VIDEO) */
         .atleti-grid {
             display: grid;
@@ -191,16 +186,18 @@
             align-items: center;
         }
 
-        .atleta-item img {
+        .atleta-item img, 
+        .atleta-item video.thumbnail-video {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.4s ease, filter 0.4s ease;
         }
 
-        .atleta-item:hover img {
+        .atleta-item:hover img,
+        .atleta-item:hover video.thumbnail-video {
             transform: scale(1.05);
-            filter: brightness(0.7);
+            filter: brightness(0.6);
         }
 
         /* Icona Play per i Video */
@@ -355,7 +352,7 @@
 
         <div id="loading-message">
             <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
-            <p>Sincronizzazione con la galleria in corso...</p>
+            <p>Scansione della cartella GitHub in corso...</p>
         </div>
 
         <section class="atleti-grid" id="atletiGrid"></section>
@@ -372,76 +369,100 @@
         <p>[Via Capece Scondito, 61Bis] &middot;  &copy; 2026 DOMEPAT</p>
     </footer>
 
-    <!-- LIGHTBOX MULTIMEDIALE -->
+    <!-- LIGHTBOX MULTIMEDIALE LOCALE -->
     <div class="lightbox" id="lightbox">
         <span class="lightbox-close" id="lightboxClose">&times;</span>
         <img src="" alt="Zoom Immagine" class="lightbox-content" id="lightboxImg">
-        <iframe src="" class="lightbox-content" id="lightboxIframe" style="border: none; width: 90%; height: 80%; background-color: #000;" allow="autoplay; fullscreen"></iframe>
+        <video src="" class="lightbox-content" id="lightboxVideo" controls controlsList="nodownload"></video>
     </div>
 
-    <!-- LOGICA SCRIPT AVANZATA -->
+    <!-- LOGICA SCRIPT PER RICERCA AUTOMATICA TRAMITE GITHUB API -->
     <script>
-        const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbxAF-4cVF-CsIE7FtO1yRtL5VQJo9EAQI2vyNBLsgARjeKm2AFOnEIRoGDyJhGLcbF2ew/exec"; 
+        // =====================================================================
+        // 1. INSERISCI QUI I DATI DEL TUO ACCOUNT GITHUB
+        // =====================================================================
+        const GITHUB_USERNAME = "palestradomepat-source"; // Es. "mario-rossi"
+        const REPOSITORY_NAME = "
+palestra_domepat"; // Es. "palestra-domepat"
+        const CARTELLA_NOME = "ATLETI"; // Il nome della cartella (non modificarlo se è ATLETI)
+        
+        const cartellaLocale = CARTELLA_NOME + "/"; 
+        const githubApiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPOSITORY_NAME}/contents/${CARTELLA_NOME}`;
         
         const grid = document.getElementById('atletiGrid');
         const loadingMessage = document.getElementById('loading-message');
         
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightboxImg');
-        const lightboxIframe = document.getElementById('lightboxIframe');
+        const lightboxVideo = document.getElementById('lightboxVideo');
         const lightboxClose = document.getElementById('lightboxClose');
 
-        async function caricaMediaDaDrive() {
+        // Funzione per ricavare l'estensione del file
+        function ottieniEstensione(nomeFile) {
+            return nomeFile.split('.').pop().toLowerCase();
+        }
+
+        // Funzione per controllare se è un video o un'immagine supportata
+        function isVideo(estensione) {
+            return ['mp4', 'webm', 'mov', 'ogg'].includes(estensione);
+        }
+
+        function isImmagine(estensione) {
+            return ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(estensione);
+        }
+
+        // Funzione principale che legge automaticamente da GitHub
+        async function caricaGalleriaAutomatica() {
+            // Controllo se i dati GitHub sono stati modificati
+            if (GITHUB_USERNAME === "INSERISCI_QUI_USERNAME" || REPOSITORY_NAME === "INSERISCI_QUI_NOME_REPO") {
+                loadingMessage.innerHTML = `
+                    <i class="fa-solid fa-triangle-exclamation fa-2x" style="color: var(--rosso-evidenziatore)"></i>
+                    <p><strong>Configurazione mancante!</strong><br>Inserisci il tuo Username e il nome del Repository nello script in fondo al codice HTML.</p>
+                `;
+                return;
+            }
+
             try {
-                // Fetch potenziata per seguire i redirect di Google
-                const response = await fetch(URL_APPS_SCRIPT, { redirect: "follow" });
+                const response = await fetch(githubApiUrl);
                 
-                // Leggiamo la risposta come testo puro prima per capire cosa ci sta dicendo Google
-                const responseText = await response.text();
-                
-                let files;
-                try {
-                    // Proviamo a trasformarlo in dati JSON
-                    files = JSON.parse(responseText);
-                } catch (parseError) {
-                    // Se non è JSON, significa che Google ci sta restituendo una pagina HTML di errore (es. permessi mancanti)
-                    loadingMessage.innerHTML = `
-                        <i class="fa-solid fa-triangle-exclamation fa-2x" style="color: var(--rosso-evidenziatore)"></i>
-                        <p><strong>Lo script Google ha bloccato l'accesso.</strong></p>
-                        <p style="font-size: 0.9rem; text-align: left; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 5px;">
-                        Ciò accade quasi sempre per uno di questi motivi:<br>
-                        1. Su Google Script non hai impostato "Chi ha accesso: Chiunque".<br>
-                        2. Non hai creato una "Nuova Versione" quando hai aggiornato il codice.<br>
-                        3. La cartella Drive non è condivisa come "Chiunque abbia il link".
-                        </p>
-                    `;
-                    console.error("Errore Parsing JSON. Google ha risposto con:", responseText.substring(0, 200) + "...");
-                    return;
-                }
-                
-                if (files.length === 0) {
-                    loadingMessage.innerHTML = "<p>Nessun file trovato. Controlla che ci siano foto o video nella cartella Drive.</p>";
-                    return;
+                if (!response.ok) {
+                    throw new Error("Errore nel recupero della cartella. Verifica che la repository sia pubblica e che i nomi inseriti siano esatti.");
                 }
 
-                // Se tutto è andato bene, nascondiamo il caricamento e generiamo le foto
+                const data = await response.json();
                 loadingMessage.style.display = 'none';
 
-                files.forEach(file => {
+                let fileTrovati = 0;
+
+                data.forEach(file => {
+                    // Controlliamo che sia un file e non una sotto-cartella
+                    if (file.type !== "file") return;
+
+                    const filename = file.name;
+                    const estensione = ottieniEstensione(filename);
+                    
+                    // Verifichiamo se il file è multimediale
+                    if (!isVideo(estensione) && !isImmagine(estensione)) return;
+
+                    fileTrovati++;
+                    const tipo = isVideo(estensione) ? 'video' : 'image';
+                    
+                    // Visto che siamo sulla pagina stessa, possiamo usare il percorso relativo classico locale
+                    const percorsoCompleto = cartellaLocale + filename;
+
                     const div = document.createElement('div');
                     div.className = 'atleta-item';
-                    div.setAttribute('data-type', file.type);
-                    div.setAttribute('data-id', file.id);
+                    div.setAttribute('data-type', tipo);
+                    div.setAttribute('data-src', percorsoCompleto);
 
-                    if (file.type === 'image') {
-                        const imgUrl = `https://drive.google.com/thumbnail?id=${file.id}&sz=w800`;
+                    if (tipo === 'image') {
                         div.innerHTML = `
-                            <img src="${imgUrl}" alt="${file.name}">
+                            <img src="${percorsoCompleto}" alt="${filename}">
                             <span class="tipo-badge"><i class="fa-solid fa-camera"></i> Foto</span>
                         `;
-                    } else if (file.type === 'video') {
+                    } else if (tipo === 'video') {
                         div.innerHTML = `
-                            <img src="logo.jpg" alt="Video Placeholder" style="opacity: 0.3;">
+                            <video src="${percorsoCompleto}" class="thumbnail-video" muted preload="metadata"></video>
                             <i class="fa-solid fa-play play-icon"></i>
                             <span class="tipo-badge"><i class="fa-solid fa-video"></i> Video</span>
                         `;
@@ -451,30 +472,37 @@
                     grid.appendChild(div);
                 });
 
+                if (fileTrovati === 0) {
+                    grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: var(--grigio-verde); font-size: 1.2rem;'>La cartella ATLETI è vuota o contiene file non supportati.</p>";
+                }
+
             } catch (error) {
                 loadingMessage.innerHTML = `
                     <i class="fa-solid fa-xmark fa-2x" style="color: var(--rosso-evidenziatore)"></i>
-                    <p>Errore di rete. Assicurati di essere connesso a internet o controlla il blocco CORS del browser.</p>
+                    <p><strong>Errore di connessione a GitHub.</strong></p>
+                    <p style="font-size: 0.9rem;">${error.message}</p>
                 `;
-                console.error("Errore Fetch di rete:", error);
+                console.error(error);
             }
         }
 
+        // Gestione apertura e chiusura Lightbox
         function apriLightbox(event) {
             const item = event.currentTarget;
             const tipo = item.getAttribute('data-type');
-            const id = item.getAttribute('data-id');
+            const src = item.getAttribute('data-src');
 
             if (tipo === 'image') {
-                lightboxImg.src = `https://lh3.googleusercontent.com/d/${id}`;
+                lightboxImg.src = src;
                 lightboxImg.style.display = 'block';
-                lightboxIframe.style.display = 'none';
-                lightboxIframe.src = "";
+                lightboxVideo.style.display = 'none';
+                lightboxVideo.src = "";
             } else if (tipo === 'video') {
-                lightboxIframe.src = `https://drive.google.com/file/d/${id}/preview`;
-                lightboxIframe.style.display = 'block';
+                lightboxVideo.src = src;
+                lightboxVideo.style.display = 'block';
                 lightboxImg.style.display = 'none';
                 lightboxImg.src = "";
+                lightboxVideo.play();
             }
 
             lightbox.classList.add('attivo');
@@ -482,9 +510,10 @@
 
         function chiudiLightbox() {
             lightbox.classList.remove('attivo');
+            lightboxVideo.pause();
             setTimeout(() => {
                 lightboxImg.src = "";
-                lightboxIframe.src = ""; 
+                lightboxVideo.src = ""; 
             }, 300);
         }
 
@@ -495,7 +524,8 @@
             }
         });
 
-        caricaMediaDaDrive();
+        // Avvia la scansione automatica
+        caricaGalleriaAutomatica();
 
     </script>
 </body>
