@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I Nostri Atleti - DOMEPAT</title>
+    <!-- Font istituzionale e serio -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <!-- FontAwesome per le icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --blu-istituzionale: #0B2545;
+            --verde-militare: #134074;
+            --grigio-verde: #8DA9C4;
+            --oro: #EEB902;
+            --giallo-oro: #D4AF37;
+            --bianco: #EEF4F8;
+            --rosso-accento: #A63A50;
+            --nero-sfondo: #051622;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--nero-sfondo);
+            color: var(--bianco);
+            line-height: 1.6;
+            padding-top: 80px;
+        }
+
+        /* HEADER IDENTICO ALLA HOME */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background-color: var(--blu-istituzionale);
+            border-bottom: 3px solid var(--giallo-oro);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+        }
+
+        .logo-rotondo {
+            width: 50px;
+            height: 50px;
+            background-color: var(--bianco);
+            border-radius: 50%;
+            border: 2px solid var(--bianco);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .logo-rotondo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .logo-testo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: var(--bianco);
+        }
+
+        .contatti-nav {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .telefono-nav {
+            color: var(--oro);
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+
+        .telefono-nav:hover {
+            color: var(--bianco);
+        }
+
+        .social-nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-nav a {
+            color: var(--bianco);
+            font-size: 1.5rem;
+            transition: transform 0.3s, color 0.3s;
+        }
+
+        .social-nav a:hover {
+            color: var(--giallo-oro);
+            transform: scale(1.1);
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* TITOLO PAGINA */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .page-header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--giallo-oro);
+            margin-bottom: 10px;
+        }
+        
+        .page-header p {
+            font-size: 1.1rem;
+            color: var(--grigio-verde);
+        }
+
+        /* MESSAGGIO DI CARICAMENTO E ERRORI */
+        #loading-message {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--giallo-oro);
+            margin: 50px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            background: rgba(19, 64, 116, 0.2);
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px dashed var(--grigio-verde);
+        }
+
+        #loading-message p {
+            line-height: 1.6;
+            max-width: 800px;
+        }
+
+        /* GRIGLIA ATLETI (FOTO E VIDEO) */
+        .atleti-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .atleta-item {
+            position: relative;
+            cursor: pointer;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid var(--blu-istituzionale);
+            aspect-ratio: 1 / 1;
+            background-color: var(--blu-istituzionale);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .atleta-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease, filter 0.4s ease;
+        }
+
+        .atleta-item:hover img {
+            transform: scale(1.05);
+            filter: brightness(0.7);
+        }
+
+        /* Icona Play per i Video */
+        .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.8);
+            pointer-events: none;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .atleta-item:hover .play-icon {
+            color: var(--giallo-oro);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        
+        /* Etichetta tipo file */
+        .tipo-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--giallo-oro);
+            pointer-events: none;
+        }
+
+        /* TASTO TORNA ALLA HOME */
+        .btn-indietro {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 50px;
+            background-color: transparent;
+            color: var(--grigio-verde);
+            padding: 10px 20px;
+            border: 1px solid var(--grigio-verde);
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .btn-indietro:hover {
+            background-color: var(--grigio-verde);
+            color: var(--nero-sfondo);
+        }
+
+        /* LIGHTBOX MULTIMEDIALE */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox.attivo {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 80%;
+            border: 3px solid var(--giallo-oro);
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            display: none;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            color: var(--bianco);
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            z-index: 2001;
+        }
+
+        .lightbox-close:hover {
+            color: var(--giallo-oro);
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: var(--blu-istituzionale);
+            border-top: 3px solid var(--giallo-oro);
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+            color: var(--grigio-verde);
+        }
+
+        footer h3 {
+            color: var(--bianco);
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        footer p {
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            body { padding-top: 130px; }
+            header { flex-direction: column; height: auto; padding: 15px; gap: 10px; }
+            .contatti-nav { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-area">
+            <div class="logo-rotondo">
+                <img src="logo.jpg" alt="Logo DOMEPAT">
+            </div>
+            <div class="logo-testo">DOMEPAT</div>
+        </a>
+        <div class="contatti-nav">
+            <a href="tel:+393387606664" class="telefono-nav">
+                <i class="fa-solid fa-phone"></i> +39 338 760 6664
+            </a>
+            <div class="social-nav">
+                <a href="https://maps.app.goo.gl/cLZA9fFAd58hpSAeA" target="_blank" aria-label="Google Maps"><i class="fa-solid fa-location-dot"></i></a>
+                <a href="https://www.facebook.com/IL_TUO_PROFILO" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.instagram.com/palestra.domepat?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1>I Nostri Atleti</h1>
+            <p>I volti, i traguardi e la dedizione dei ragazzi che si preparano con noi.</p>
+        </div>
+
+        <div id="loading-message">
+            <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+            <p>Sincronizzazione con la galleria in corso...</p>
+        </div>
+
+        <section class="atleti-grid" id="atletiGrid"></section>
+
+        <a href="index.html" class="btn-indietro">
+            <i class="fa-solid fa-arrow-left"></i> Torna alla Home
+        </a>
+
+    </main>
+
+    <footer>
+        <h3>DOMEPAT</h3>
+        <p>Preparazione fisica per concorsi militari &mdash; a cura del Prof. Domenico Patricelli</p>
+        <p>[Via Capece Scondito, 61Bis] &middot;  &copy; 2026 DOMEPAT</p>
+    </footer>
+
+    <!-- LIGHTBOX MULTIMEDIALE -->
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close" id="lightboxClose">&times;</span>
+        <img src="" alt="Zoom Immagine" class="lightbox-content" id="lightboxImg">
+        <iframe src="" class="lightbox-content" id="lightboxIframe" style="border: none; width: 90%; height: 80%; background-color: #000;" allow="autoplay; fullscreen"></iframe>
+    </div>
+
+    <!-- LOGICA SCRIPT AVANZATA -->
+    <script>
+        const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbxAF-4cVF-CsIE7FtO1yRtL5VQJo9EAQI2vyNBLsgARjeKm2AFOnEIRoGDyJhGLcbF2ew/exec"; 
+        
+        const grid = document.getElementById('atletiGrid');
+        const loadingMessage = document.getElementById('loading-message');
+        
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxIframe = document.getElementById('lightboxIframe');
+        const lightboxClose = document.getElementById('lightboxClose');
+
+        async function caricaMediaDaDrive() {
+            try {
+                // Fetch potenziata per seguire i redirect di Google
+                const response = await fetch(URL_APPS_SCRIPT, { redirect: "follow" });
+                
+                // Leggiamo la risposta come testo puro prima per capire cosa ci sta dicendo Google
+                const responseText = await response.text();
+                
+                let files;
+                try {
+                    // Proviamo a trasformarlo in dati JSON
+                    files = JSON.parse(responseText);
+                } catch (parseError) {
+                    // Se non è JSON, significa che Google ci sta restituendo una pagina HTML di errore (es. permessi mancanti)
+                    loadingMessage.innerHTML = `
+                        <i class="fa-solid fa-triangle-exclamation fa-2x" style="color: var(--rosso-evidenziatore)"></i>
+                        <p><strong>Lo script Google ha bloccato l'accesso.</strong></p>
+                        <p style="font-size: 0.9rem; text-align: left; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 5px;">
+                        Ciò accade quasi sempre per uno di questi motivi:<br>
+                        1. Su Google Script non hai impostato "Chi ha accesso: Chiunque".<br>
+                        2. Non hai creato una "Nuova Versione" quando hai aggiornato il codice.<br>
+                        3. La cartella Drive non è condivisa come "Chiunque abbia il link".
+                        </p>
+                    `;
+                    console.error("Errore Parsing JSON. Google ha risposto con:", responseText.substring(0, 200) + "...");
+                    return;
+                }
+                
+                if (files.length === 0) {
+                    loadingMessage.innerHTML = "<p>Nessun file trovato. Controlla che ci siano foto o video nella cartella Drive.</p>";
+                    return;
+                }
+
+                // Se tutto è andato bene, nascondiamo il caricamento e generiamo le foto
+                loadingMessage.style.display = 'none';
+
+                files.forEach(file => {
+                    const div = document.createElement('div');
+                    div.className = 'atleta-item';
+                    div.setAttribute('data-type', file.type);
+                    div.setAttribute('data-id', file.id);
+
+                    if (file.type === 'image') {
+                        const imgUrl = `https://drive.google.com/thumbnail?id=${file.id}&sz=w800`;
+                        div.innerHTML = `
+                            <img src="${imgUrl}" alt="${file.name}">
+                            <span class="tipo-badge"><i class="fa-solid fa-camera"></i> Foto</span>
+                        `;
+                    } else if (file.type === 'video') {
+                        div.innerHTML = `
+                            <img src="logo.jpg" alt="Video Placeholder" style="opacity: 0.3;">
+                            <i class="fa-solid fa-play play-icon"></i>
+                            <span class="tipo-badge"><i class="fa-solid fa-video"></i> Video</span>
+                        `;
+                    }
+                    
+                    div.addEventListener('click', apriLightbox);
+                    grid.appendChild(div);
+                });
+
+            } catch (error) {
+                loadingMessage.innerHTML = `
+                    <i class="fa-solid fa-xmark fa-2x" style="color: var(--rosso-evidenziatore)"></i>
+                    <p>Errore di rete. Assicurati di essere connesso a internet o controlla il blocco CORS del browser.</p>
+                `;
+                console.error("Errore Fetch di rete:", error);
+            }
+        }
+
+        function apriLightbox(event) {
+            const item = event.currentTarget;
+            const tipo = item.getAttribute('data-type');
+            const id = item.getAttribute('data-id');
+
+            if (tipo === 'image') {
+                lightboxImg.src = `https://lh3.googleusercontent.com/d/${id}`;
+                lightboxImg.style.display = 'block';
+                lightboxIframe.style.display = 'none';
+                lightboxIframe.src = "";
+            } else if (tipo === 'video') {
+                lightboxIframe.src = `https://drive.google.com/file/d/${id}/preview`;
+                lightboxIframe.style.display = 'block';
+                lightboxImg.style.display = 'none';
+                lightboxImg.src = "";
+            }
+
+            lightbox.classList.add('attivo');
+        }
+
+        function chiudiLightbox() {
+            lightbox.classList.remove('attivo');
+            setTimeout(() => {
+                lightboxImg.src = "";
+                lightboxIframe.src = ""; 
+            }, 300);
+        }
+
+        lightboxClose.addEventListener('click', chiudiLightbox);
+        lightbox.addEventListener('click', (e) => {
+            if(e.target === lightbox) {
+                chiudiLightbox();
+            }
+        });
+
+        caricaMediaDaDrive();
+
+    </script>
+</body>
+</html>

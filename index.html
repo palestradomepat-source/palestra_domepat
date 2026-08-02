@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOMEPAT - Preparazione Prove Fisiche Concorsi Militari</title>
+    <!-- Font istituzionale e serio -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <!-- FontAwesome per le icone Social, Telefono e Punti Chiave -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --blu-istituzionale: #0B2545;
+            --verde-militare: #134074;
+            --grigio-verde: #8DA9C4;
+            --oro: #EEB902;
+            --giallo-oro: #D4AF37;
+            --bianco: #EEF4F8;
+            --rosso-accento: #A63A50;
+            --rosso-evidenziatore: #FF4D4D;
+            --nero-sfondo: #051622;
+            
+            /* Nuovi colori Danza e Pilates */
+            --sfondo-cipria: #FDE2E4;
+            --sfondo-rosa-chiaro: #FFF0F5;
+            --bordo-rosa: #FBC4AB;
+            --testo-rosa-scuro: #4A2E35;
+            --titolo-rosa: #C06E7F;
+            --evidenziazione-rosa: #A34A5F;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--nero-sfondo);
+            color: var(--bianco);
+            line-height: 1.6;
+            padding-top: 80px;
+        }
+
+        /* BARRA DI NAVIGAZIONE FISSA */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background-color: var(--blu-istituzionale);
+            border-bottom: 3px solid var(--giallo-oro);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none; /* Rimuove sottolineatura se usato come link */
+        }
+
+        .logo-rotondo {
+            width: 50px;
+            height: 50px;
+            background-color: var(--bianco);
+            border-radius: 50%;
+            border: 2px solid var(--bianco);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .logo-rotondo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .logo-testo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: var(--bianco);
+        }
+
+        .contatti-nav {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .telefono-nav {
+            color: var(--oro);
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+
+        .telefono-nav:hover {
+            color: var(--bianco);
+        }
+
+        .social-nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-nav a {
+            color: var(--bianco);
+            font-size: 1.5rem;
+            transition: transform 0.3s, color 0.3s;
+        }
+
+        .social-nav a:hover {
+            color: var(--giallo-oro);
+            transform: scale(1.1);
+        }
+
+        /* CONTENITORE PRINCIPALE */
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* HERO SECTION / TITOLO */
+        .hero-section {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 40px;
+        }
+
+        .hero-section h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--giallo-oro);
+        }
+
+        /* PUNTI CHIAVE IN EVIDENZA */
+        .punti-chiave {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .punto {
+            flex: 1;
+            background: linear-gradient(145deg, rgba(19, 64, 116, 0.6), rgba(11, 37, 69, 0.8));
+            border: 1px solid var(--giallo-oro);
+            border-radius: 8px;
+            padding: 25px 15px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--bianco);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .punto i {
+            display: block;
+            font-size: 2.5rem;
+            color: var(--oro);
+            margin-bottom: 15px;
+        }
+
+        /* TRAFILETTO DESCRIZIONE */
+        .descrizione-attivita {
+            font-size: 1.1rem;
+            text-align: justify;
+            background-color: rgba(11, 37, 69, 0.4);
+            padding: 30px;
+            border-left: 5px solid var(--giallo-oro);
+            border-radius: 4px;
+            margin-bottom: 50px;
+        }
+
+        .descrizione-attivita p {
+            margin-bottom: 15px;
+        }
+
+        /* CLASSE PER TESTO IN ROSSO */
+        .testo-rosso {
+            color: var(--rosso-evidenziatore);
+            font-weight: 800;
+        }
+
+        /* SEZIONE COME LAVORIAMO */
+        .sezione-lavoro {
+            margin-bottom: 50px;
+        }
+
+        .sezione-lavoro h2 {
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            color: var(--grigio-verde);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--grigio-verde);
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        .testo-lavoro {
+            font-size: 1.1rem;
+            text-align: justify;
+            margin-bottom: 30px;
+        }
+
+        /* AREA CALL TO ACTION */
+        .cta-box {
+            background: linear-gradient(135deg, var(--blu-istituzionale), var(--nero-sfondo));
+            border: 2px solid var(--giallo-oro);
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .cta-box p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .btn-chiamaci {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--rosso-accento);
+            color: var(--bianco);
+            padding: 15px 35px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 5px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(166, 58, 80, 0.4);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .btn-chiamaci:hover {
+            background-color: #be435c;
+            transform: translateY(-2px);
+        }
+
+        /* LINK ALLA PAGINA ATLETI */
+        .sezione-link-atleti {
+            text-align: center;
+            margin: 60px 0;
+            padding: 40px;
+            background: rgba(19, 64, 116, 0.2);
+            border: 1px solid var(--grigio-verde);
+            border-radius: 8px;
+        }
+
+        .sezione-link-atleti h2 {
+            font-size: 1.8rem;
+            color: var(--giallo-oro);
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .sezione-link-atleti p {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+        }
+
+        .btn-atleti {
+            background-color: var(--giallo-oro);
+            color: var(--blu-istituzionale);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-atleti:hover {
+            background-color: #e6c147;
+        }
+
+        /* ALTRE ATTIVITA (DANZA & PILATES) - PALETTE ROSA/CIPRIA/BIANCO */
+        .altre-attivita {
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        .altre-attivita h2 {
+            font-size: 1.5rem;
+            color: var(--bianco);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--titolo-rosa);
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        .attivita-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .attivita-card {
+            flex: 1;
+            min-width: 280px;
+            background: linear-gradient(145deg, var(--sfondo-rosa-chiaro), var(--sfondo-cipria));
+            border: 2px solid var(--bordo-rosa);
+            border-radius: 8px;
+            padding: 30px 20px;
+            color: var(--testo-rosa-scuro);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .attivita-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* STILE IMMAGINI DANZA E PILATES */
+        .img-attivita {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 2px solid var(--titolo-rosa);
+        }
+
+        .attivita-card h3 {
+            color: var(--titolo-rosa);
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--bordo-rosa);
+            padding-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .attivita-card ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+            margin: 0 auto;
+            max-width: fit-content;
+        }
+
+        .attivita-card li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .attivita-card li::before {
+            content: "\f111"; 
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            font-size: 0.5rem;
+            color: var(--evidenziazione-rosa);
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .attivita-card p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+        
+        .attivita-card p strong {
+            color: var(--evidenziazione-rosa);
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.15rem;
+        }
+
+        /* SEZIONE STRUTTURA & CAROSELLO DINAMICO */
+        .sezione-struttura {
+            margin-bottom: 50px;
+            margin-top: 50px;
+        }
+
+        .sezione-struttura h2 {
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            color: var(--grigio-verde);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--grigio-verde);
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        .carosello-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 20px 0;
+        }
+
+        .carosello-track {
+            display: flex;
+            gap: 15px;
+            width: max-content;
+            animation: scorrimentoContinuo 25s linear infinite;
+        }
+
+        .carosello-container:hover .carosello-track {
+            animation-play-state: paused;
+        }
+
+        .carosello-item {
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 2px solid var(--blu-istituzionale);
+            cursor: pointer;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .carosello-item:hover {
+            transform: scale(1.05);
+            border-color: var(--giallo-oro);
+        }
+
+        @keyframes scorrimentoContinuo {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-215px * 4)); }
+        }
+
+        /* LIGHTBOX PER ZOOM FOTO */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox.attivo {
+            display: flex;
+        }
+
+        .lightbox-img {
+            max-width: 90%;
+            max-height: 80%;
+            border: 3px solid var(--giallo-oro);
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            color: var(--bianco);
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .lightbox-close:hover {
+            color: var(--giallo-oro);
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: var(--blu-istituzionale);
+            border-top: 3px solid var(--giallo-oro);
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+            color: var(--grigio-verde);
+        }
+
+        footer h3 {
+            color: var(--bianco);
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        footer p {
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            body { padding-top: 130px; }
+            header { flex-direction: column; height: auto; padding: 15px; gap: 10px; }
+            .contatti-nav { flex-direction: column; gap: 10px; }
+            .hero-section h1 { font-size: 1.6rem; }
+            .punti-chiave { flex-direction: column; }
+            .descrizione-attivita, .testo-lavoro { text-align: left; font-size: 1rem; }
+            .attivita-grid { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BARRA DI NAVIGAZIONE FISSA (STICKY) -->
+    <header>
+        <!-- Logo ora cliccabile per tornare alla home -->
+        <a href="index.html" class="logo-area">
+            <div class="logo-rotondo">
+                <!-- Logo impostato sulla stessa directory -->
+                <img src="logo.jpg" alt="Logo DOMEPAT">
+            </div>
+            <div class="logo-testo">DOMEPAT</div>
+        </a>
+        <div class="contatti-nav">
+            <a href="tel:+393387606664" class="telefono-nav">
+                <i class="fa-solid fa-phone"></i> +39 338 760 6664
+            </a>
+            <div class="social-nav">
+                <a href="https://maps.app.goo.gl/cLZA9fFAd58hpSAeA" target="_blank" aria-label="Google Maps"><i class="fa-solid fa-location-dot"></i></a>
+                <a href="https://www.facebook.com/IL_TUO_PROFILO" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.instagram.com/preparazionifisiche_forzearmat/" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENUTO PRINCIPALE -->
+    <main>
+        
+        <!-- INTRODUZIONE -->
+        <section class="hero-section">
+            <h1>Preparazione prove fisiche concorsi militari</h1>
+        </section>
+
+        <!-- PUNTI CHIAVE IN EVIDENZA -->
+        <section class="punti-chiave">
+            <div class="punto">
+                <i class="fa-solid fa-dumbbell"></i>
+                30+ anni nel fitness e nella preparazione atletica
+            </div>
+            <div class="punto">
+                <i class="fa-solid fa-crosshairs"></i>
+                10 anni di specializzazione sui concorsi militari
+            </div>
+            <div class="punto">
+                <i class="fa-solid fa-check-double"></i>
+                95% tasso di superamento prova fisica
+            </div>
+        </section>
+
+        <!-- DESCRIZIONE ATTIVITÀ -->
+        <article class="descrizione-attivita">
+            <p>Con oltre trent'anni di esperienza nel settore del fitness e della preparazione atletica, la nostra struttura rappresenta un punto di riferimento per chi desidera raggiungere l'eccellenza fisica. Da un decennio ci siamo altamente specializzati nella preparazione mirata al superamento dei concorsi militari, vantando con orgoglio uno straordinario tasso di successo del <span class="testo-rosso">95%</span>.</p>
+            <p>La nostra palestra è perfettamente attrezzata per rispondere a ogni specifica esigenza d'allenamento, mettendo a disposizione dei nostri iscritti una completa sala pesi e un'area interamente dedicata al salto in alto. Sotto la guida esperta del <span class="testo-rosso">Prof. Domenico Patricelli</span> (docente presso Scuola Militare Nunziatella) ogni atleta viene seguito con la massima professionalità sin dal primissimo giorno. Il suo affiancamento costante e meticoloso permette di perfezionare la tecnica di corsa, ottimizzare la meccanica del salto in alto e costruire una preparazione fisica impeccabile, studiata su misura per affrontare e superare brillantemente tutte le prove previste dai bandi nazionali.</p>
+        </article>
+
+        <!-- CAROSELLO FOTO STRUTTURA -->
+        <section class="sezione-struttura">
+            <h2>La Nostra Struttura</h2>
+            <div class="carosello-container">
+                <div class="carosello-track" id="caroselloTrack">
+                    <!-- Set di immagini originale (collegato ai file nella cartella locale) -->
+                    <img src="foto-struttura-1.jpg" alt="Sala Pesi" class="carosello-item">
+                    <img src="foto-struttura-2.jpg" alt="Area Salto in Alto" class="carosello-item">
+                    <img src="foto-struttura-3.jpg" alt="Attrezzature" class="carosello-item">
+                    <img src="foto-struttura-4.jpg" alt="Preparazione Atletica" class="carosello-item">
+                    
+                    <!-- Cloni necessari per lo scorrimento infinito fluido (stessi file di sopra) -->
+                    <img src="foto-struttura-1.jpg" alt="Sala Pesi" class="carosello-item">
+                    <img src="foto-struttura-2.jpg" alt="Area Salto in Alto" class="carosello-item">
+                    <img src="foto-struttura-3.jpg" alt="Attrezzature" class="carosello-item">
+                    <img src="foto-struttura-4.jpg" alt="Preparazione Atletica" class="carosello-item">
+                </div>
+            </div>
+        </section>
+
+        <!-- COME LAVORIAMO & CALL TO ACTION -->
+        <section class="sezione-lavoro">
+            <h2>Come Lavoriamo</h2>
+            <div class="testo-lavoro">
+                <p>Crediamo fortemente nel valore umano e nell'importanza di un supporto personalizzato. Per questo motivo, vi accoglieremo con cortesia e disponibilità per un <span class="testo-rosso">primo incontro conoscitivo comprensivo di un'attenta valutazione iniziale</span>. All'interno del nostro ambiente, sempre accogliente e profondamente motivante, ogni iscritto viene affiancato passo dopo passo per garantire un miglioramento costante e il raggiungimento dei propri obiettivi.</p>
+            </div>
+
+            <div class="cta-box">
+                <p>Vi invitiamo a contattarci per richiedere maggiori informazioni e iniziare subito il vostro percorso verso il successo.</p>
+                <a href="tel:+393387606664" class="btn-chiamaci">
+                    <i class="fa-solid fa-phone-flip"></i> Chiamaci Ora
+                </a>
+            </div>
+        </section>
+
+        <!-- SEZIONE COLLEGAMENTO ALLA PAGINA ATLETI -->
+        <section class="sezione-link-atleti">
+            <h2>I Nostri Atleti</h2>
+            <p>Guarda i video, scopri i risultati dei nostri ragazzi e lasciati ispirare dai loro traguardi.</p>
+            <a href="atleti.html" class="btn-chiamaci btn-atleti">
+                <i class="fa-solid fa-medal"></i> Scopri i nostri atleti
+            </a>
+        </section>
+
+        <!-- ALTRE ATTIVITÀ DELLA STRUTTURA (PALETTE ROSA/CIPRIA) -->
+        <section class="altre-attivita">
+            <h2>Nella nostra struttura troverai anche:</h2>
+            <div class="attivita-grid">
+                
+                <!-- Card Scuola di Danza -->
+                <div class="attivita-card">
+                    <!-- Immagine locale Danza -->
+                    <img src="foto-danza.jpg" alt="Scuola di Danza" class="img-attivita">
+                    
+                    <h3>Scuola di Danza "MILPASOS"</h3>
+                    <ul>
+                        <li>Propedeutica</li>
+                        <li>Classico</li>
+                        <li>Moderno</li>
+                        <li>Contemporaneo</li>
+                        <li>Hip - Hop</li>
+                        <li>Flamenco</li>
+                        <li>Danza Aerea</li>
+                    </ul>
+                </div>
+
+                <!-- Card Corsi di Pilates -->
+                <div class="attivita-card">
+                    <!-- Immagine locale Pilates -->
+                    <img src="foto-pilates.jpg" alt="Corsi di Pilates" class="img-attivita">
+                    
+                    <h3>Corsi di Pilates</h3>
+                    <p>
+                        <strong>Lunedì, Mercoledì, Venerdì</strong>
+                        ore 9:00 - 10:00
+                    </p>
+                    <p>
+                        <strong>Lunedì, Mercoledì</strong>
+                        ore 19:00 - 20:00
+                    </p>
+                </div>
+                
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER RICHIESTO -->
+    <footer>
+        <h3>DOMEPAT</h3>
+        <p>Preparazione fisica per concorsi militari &mdash; a cura del Prof. Domenico Patricelli</p>
+        <p>[Via Capece Scondito, 61Bis] &middot;  &copy; 2026 DOMEPAT</p>
+    </footer>
+
+    <!-- STRUTTURA POPUP LIGHTBOX PER LO ZOOM DELLE IMMAGINI -->
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close" id="lightboxClose">&times;</span>
+        <img src="" alt="Zoom Immagine" class="lightbox-img" id="lightboxImg">
+    </div>
+
+    <!-- LOGICA SCRIPT -->
+    <script>
+        // Gestione Lightbox per Zoom
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxClose = document.getElementById('lightboxClose');
+        const caroselloImgs = document.querySelectorAll('.carosello-item');
+
+        caroselloImgs.forEach(img => {
+            img.addEventListener('click', () => {
+                lightboxImg.src = img.src;
+                lightbox.classList.add('attivo');
+            });
+        });
+
+        lightboxClose.addEventListener('click', () => {
+            lightbox.classList.remove('attivo');
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if(e.target === lightbox) {
+                lightbox.classList.remove('attivo');
+            }
+        });
+    </script>
+</body>
+</html>
